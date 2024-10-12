@@ -12,7 +12,7 @@ import com.dss.spring.model.Product;
 import com.dss.spring.service.ProductService;
 
 @Controller
-//@RequestMapping("/admin")
+//@RequestMapping("/products")
 public class ProductController {
 
 	private ProductService productService;
@@ -34,13 +34,27 @@ public class ProductController {
         redirectAttributes.addFlashAttribute("message", "Product added successfully!");
         return "redirect:/admin";
     }
-	/*
-    @GetMapping("/admin")
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
-        return "admin";
-    }
-    */
+	
+	@PostMapping("/admin/deleteProduct")
+	public String deleteProduct(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+	    productService.deleteProduct(id);
+	    redirectAttributes.addFlashAttribute("message", "Product removed successfully!");
+	    return "redirect:/admin";
+	}
+
+
+	@GetMapping("/admin")
+	public String showCatalogAdmin(Model model) {
+		List<Product> products = productService.getAllProducts();
+		model.addAttribute("products", products);
+		return "admin";
+   }
+	
+	@GetMapping("/catalog")
+	public String showCatalog(Model model) {
+		List<Product> products = productService.getAllProducts();
+		model.addAttribute("products", products);
+		return "catalog";
+   }
 
 }

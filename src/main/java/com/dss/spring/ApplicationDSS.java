@@ -17,19 +17,13 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Date;
 import java.util.Optional;
 
-
 @SpringBootApplication
 public class ApplicationDSS extends SpringBootServletInitializer {
 	private static final Logger log = LoggerFactory.getLogger(ApplicationDSS.class);
 	public static void main(String[] args) {
 		SpringApplication.run(ApplicationDSS.class, args);
 	}
-
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(ApplicationDSS.class);
-	}
-	
+/*
 	@Bean
     CommandLineRunner jpaSample(TodoRepository todoRepo) {
       return (args) -> {
@@ -71,5 +65,6 @@ public class ApplicationDSS extends SpringBootServletInitializer {
     System.out.println("Entidad posteada en repo"+postForEnt2);
     };
 	}
+	*/
 
 }

@@ -1,4 +1,4 @@
-package com.dss.spring;
+package com.dss.spring.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -9,14 +9,9 @@ public class RootUriController {
       return "index";
     }
 	
-	@GetMapping("/admin")
-    public String admin() {
-      return "admin";
+	@GetMapping("/login")
+    public String login() {
+      return "index";
     }
-	/*
-	@GetMapping("/products")
-    public String products() {
-      return "products";
-    }
-    */
+	
 }

@@ -125,8 +125,13 @@
             <a href="/myBag">My Bag</a>
         </div>
         <div>
-            <span class="username" text="Hola Admin">Username</span>
-            <form th:action="@{/logout}" method="post" style="display: inline;">
+			<p th:if="${#authentication != null}">
+				¡Hola, <span th:text="${#authentication.name}">Usuario</span>!
+			</p>
+			<div th:if="${#authentication == null}">
+		        <p>No estás autenticado. <a th:href="@{/login}">Iniciar sesión</a></p>
+			</div>
+            <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         </div>
@@ -134,7 +139,7 @@
 
     <h1>Catalog</h1>
 
-    <div class="catalog-container">
+    <div th:if="${#authentication != null}" class="catalog-container">
         <div th:each="product : ${products}" class="product-card">
             <div class="product-name" th:text="${product.name}">Product Name</div>
             <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>

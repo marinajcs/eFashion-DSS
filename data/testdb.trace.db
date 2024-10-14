@@ -4,3 +4,11 @@ The object is already closed [90007-214]
 2024-10-14 13:40:16 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: El objeto ya está cerrado
 The object is already closed [90007-214]
+2024-10-14 18:45:48 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PRODUCTOS" no encontrada
+Table "PRODUCTOS" not found; SQL statement:
+SCRIPT TO 'exportedDB.sql' TABLE PRODUCTOS [42102-214]
+2024-10-14 18:47:52 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "PRODUCTS" no encontrada
+Table "PRODUCTS" not found; SQL statement:
+SCRIPT TO 'exportedDB.sql' TABLE PRODUCTS [42102-214]

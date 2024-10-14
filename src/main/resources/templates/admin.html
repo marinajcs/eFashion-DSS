@@ -76,10 +76,13 @@
 </head>
 <body>
 
-    <!-- Formulario para agregar productos -->
+	<div class="text-center mt-4">
+		<a href="/catalog" class="btn btn-secondary">Back to app</a>
+	</div>
+			
     <div class="form-container">
         <h2>Add Product</h2>
-        <form id="productForm" action="/admin/addProduct" method="POST">
+        <form id="productForm" action="/admin/products/add" method="POST">
             <div class="form-group">
                 <label for="productName">Product Name:</label>
                 <input type="text" class="form-control" id="productName" name="name" placeholder="Enter product name" required>
@@ -102,11 +105,11 @@
         <div th:each="product : ${products}" class="product-card">
             <h5 th:text="${product.name}">Product Name</h5>
             <p class="product-price" th:text="'$' + ${product.price}">$0.00</p>
-				<form th:action="@{/admin/editProductForm}" method="get" style="display:inline;">
+				<form th:action="@{/admin/products/edit}" method="get" style="display:inline;">
                     <input type="hidden" name="id" th:value="${product.id}" />
                     <button class="btn btn-primary">Edit</button>
                 </form>
-                <form th:action="@{/admin/deleteProduct}" method="post" style="display:inline;">
+                <form th:action="@{/admin/products/delete}" method="post" style="display:inline;">
                     <input type="hidden" name="id" th:value="${product.id}" />
                     <button class="btn btn-danger" type="submit">Remove</button>
                 </form>

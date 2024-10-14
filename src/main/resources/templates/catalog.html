@@ -9,6 +9,15 @@
             margin: 0;
             padding: 20px;
         }
+		
+		.page-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 20px;
+        }
 
         .navbar {
             background-color: #333;
@@ -118,18 +127,23 @@
     </style>
 </head>
 <body>
-	
+    <div class="page-title">
+        eFashion
+    </div>
+		
     <div class="navbar">
         <div>
             <a href="/catalog">Catalog</a>
             <a href="/myBag">My Bag</a>
+			<a href="/admin/products" sec:authorize="hasRole('ROLE_ADMIN')">Admin console</a>
+			<button onclick="downloadSQL()">Descargar Base de Datos</button>
         </div>
         <div>
 			<p th:if="${#authentication != null}">
-				¡Hola, <span th:text="${#authentication.name}">Usuario</span>!
+				Hello, <span th:text="${#authentication.name}">Usuario</span>!
 			</p>
 			<div th:if="${#authentication == null}">
-		        <p>No estás autenticado. <a th:href="@{/login}">Iniciar sesión</a></p>
+		        <p>You must login. <a th:href="@{/login}">Login</a></p>
 			</div>
             <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="logout-button">Logout</button>
@@ -146,6 +160,12 @@
             <a href="#" class="buy-button">Add to my bag</a>
         </div>
     </div>
+	
+	<script>
+        function downloadSQL() {
+            window.location.href = '/exportDB';
+        }
+    </script>
 
 </body>
 </html>

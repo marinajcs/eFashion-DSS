@@ -16,13 +16,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-            		//.requestMatchers("/admin/**").hasRole("ADMIN")
+            		.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
 	                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
 	                .anyRequest().authenticated()
             )
             .formLogin(login -> login
 	                .loginPage("/login")
-	                //.defaultSuccessUrl("/catalog", true)
+	                .defaultSuccessUrl("/catalog", true)
 	                .permitAll()
             )
             .logout(logout -> logout.permitAll());

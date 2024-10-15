@@ -16,8 +16,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-            		.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-	                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
+            		.requestMatchers(new AntPathRequestMatcher("/admin/**", "/exportDB")).hasRole("ADMIN")
+	                .requestMatchers(new AntPathRequestMatcher("/h2-console/**", "/catalog")).permitAll()
+	                .requestMatchers(new AntPathRequestMatcher("/catalog")).permitAll()
 	                .anyRequest().authenticated()
             )
             .formLogin(login -> login

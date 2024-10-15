@@ -136,15 +136,18 @@
             <a href="/catalog">Catalog</a>
             <a href="/bag">My Bag</a>
 			<a href="/admin/products" sec:authorize="hasRole('ROLE_ADMIN')">Admin console</a>
-			<button onclick="downloadSQL()">Download DB</button>
+			<button onclick="downloadSQL()" sec:authorize="hasRole('ROLE_ADMIN')">Download DB</button>
         </div>
         <div>
 			<p th:if="${#authentication != null}">
 				Hello, <span th:text="${#authentication.name}">Usuario</span>!
 			</p>
-            <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display: inline;">
+            <form th:if="${#authentication.name != 'anonymousUser'}" th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
+			<form th:if="${#authentication.name == 'anonymousUser'}" th:action="@{/login}" method="post" style="display: inline;">
+			    <button type="submit" class="logout-button">Login</button>
+			</form>
         </div>
     </div>
 
@@ -157,7 +160,7 @@
         <div th:each="product : ${products}" class="product-card">
             <div class="product-name" th:text="${product.name}">Product name</div>
             <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
-			<form th:action="@{/catalog/add}" method="post">
+			<form th:if="${#authentication != null}" th:action="@{/catalog/add}" method="post">
 				<input type="hidden" name="productId" th:value="${product.id}" />
 				<button type="submit" class="buy-button">Add to my Bag</button>
 			</form>

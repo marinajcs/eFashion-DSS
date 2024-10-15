@@ -80,7 +80,7 @@
 		<a href="/catalog" class="btn btn-secondary">Back to app</a>
 	</div>
 			
-    <div class="form-container">
+    <div id="form-container" class="form-container">
 		<h2 id="form-title">Add product</h2>
         <form id="productForm" action="/admin/products/add" method="POST">
 			<input type="hidden" id="productId" name="id" value="">
@@ -129,7 +129,9 @@
             document.getElementById('productPrice').value = price;
             document.getElementById('productForm').action = '/admin/products/update';
             document.getElementById('submitButton').innerText = 'Update';
+			document.getElementById('form-container').scrollIntoView({ behavior: 'smooth' });
 		}
+		
         document.getElementById('productForm').addEventListener('submit', function(event) {
             const name = document.getElementById('productName').value;
             const price = document.getElementById('productPrice').value;

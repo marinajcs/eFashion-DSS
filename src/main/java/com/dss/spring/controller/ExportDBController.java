@@ -22,7 +22,7 @@ public class ExportDBController {
 
             String outputFile = "exportedDB.sql";
             Statement stmt = conn.createStatement();
-            stmt.execute("SCRIPT TO 'exportedDB.sql' TABLE PRODUCT");
+            stmt.execute("SCRIPT TO 'exportedDB.sql'");
 
             stmt.close();
             conn.close();

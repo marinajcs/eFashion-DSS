@@ -136,7 +136,7 @@
             <a href="/catalog">Catalog</a>
             <a href="/bag">My Bag</a>
 			<a href="/admin/products" sec:authorize="hasRole('ROLE_ADMIN')">Admin console</a>
-			<button onclick="downloadSQL()">Download DB</button>
+			<button onclick="downloadSQL()" sec:authorize="hasRole('ROLE_ADMIN')">Download DB</button>
         </div>
         <div>
 			<p th:if="${#authentication != null}">

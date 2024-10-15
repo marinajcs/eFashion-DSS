@@ -18,7 +18,8 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    // Getters y setters
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Bag bag;
 
     public Long getId() {
         return id;

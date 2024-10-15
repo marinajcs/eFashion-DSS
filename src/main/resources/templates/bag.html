@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product Catalog</title>
+    <title>My Bag</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
             margin: 0;
             padding: 20px;
+        }
+		
+		.page-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 20px;
         }
 
         .navbar {
@@ -49,7 +58,7 @@
             color: #333;
         }
 
-        .catalog-container {
+        .bag-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -91,13 +100,13 @@
 
         .product-price {
             font-size: 1.1em;
-            color: #28a745;
+            color: rgb(0, 128, 64);
             margin-bottom: 15px;
         }
 
-        .remove-button {
+        .buy-button {
             display: inline-block;
-            background-color: rgb(249, 162, 162);
+            background-color: rgb(168, 255, 179);
             color: black;
             padding: 10px 20px;
             border-radius: 5px;
@@ -106,8 +115,8 @@
             transition: background-color 0.3s;
         }
 
-        .remove-button:hover {
-            background-color: rgb(249, 162, 162);
+        .buy-button:hover {
+            background-color: rgb(0, 255, 0);
         }
 
         @media (max-width: 768px) {
@@ -118,31 +127,54 @@
     </style>
 </head>
 <body>
-	
+    <div class="page-title">
+        eFashion
+    </div>
+		
     <div class="navbar">
         <div>
             <a href="/catalog">Catalog</a>
-            <a href="/myBag">My Bag</a>
+            <a href="/bag">My Bag</a>
+			<a href="/admin/products" sec:authorize="hasRole('ROLE_ADMIN')">Admin console</a>
+			<button onclick="downloadSQL()">Download DB</button>
         </div>
         <div>
-            <!-- Mostrar el nombre de usuario -->
-            <span class="username" text="Hola Admin">Username</span>
-            <form th:action="@{/logout}" method="post" style="display: inline;">
+			<p th:if="${#authentication != null}">
+				Hello, <span th:text="${#authentication.name}">Usuario</span>!
+			</p>
+            <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
         </div>
     </div>
 
     <h1>My Bag</h1>
-
-    <div class="catalog-container">
+	
+	<div th:if="${message}" th:text="${message}"></div>
+	<div th:if="${error}" th:text="${error}"></div>
+		
+	<div th:if="${products.size() == 0}">
+	    <p>Your Bag is empty.</p>
+	</div>
+		
+    <div th:if="${products.size() > 0}" class="bag-container">
         <div th:each="product : ${products}" class="product-card">
-            <div class="product-name" th:text="${product.name}">Product Name</div>
+            <div class="product-name" th:text="${product.name}">Product name</div>
             <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
-            <a href="#" class="buy-button">Add to my bag</a>
-			<a href="#" class="remove-button">Remove</a>
+			<form th:action="@{/bag/remove}" method="post">
+				<input type="hidden" name="productId" th:value="${product.id}" />
+                <button type="submit">Remove</button>
+            </form>
         </div>
     </div>
+	
+	<a href="/catalog">Continue shopping</a>
+	
+	<script>
+        function downloadSQL() {
+            window.location.href = '/exportDB';
+        }
+    </script>
 
 </body>
 </html>

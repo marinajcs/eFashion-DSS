@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin page</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -28,12 +28,12 @@
             font-weight: bold;
         }
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: rgb(0, 179, 45);
+            border-color: rgb(0, 179, 45);
         }
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
+            background-color: rgb(0, 128, 0);
+            border-color: rgb(0, 128, 0);
         }
         .catalog-container {
             max-width: 300px;
@@ -57,7 +57,7 @@
             color: #555;
         }
         .product-card .product-price {
-            color: #28a745;
+            color: rgb(0, 128, 64);
             font-size: 1.2em;
             margin-bottom: 10px;
         }
@@ -81,17 +81,18 @@
 	</div>
 			
     <div class="form-container">
-        <h2>Add Product</h2>
+		<h2 id="form-title">Add product</h2>
         <form id="productForm" action="/admin/products/add" method="POST">
+			<input type="hidden" id="productId" name="id" value="">
             <div class="form-group">
-                <label for="productName">Product Name:</label>
+                <label for="productName">Product name:</label>
                 <input type="text" class="form-control" id="productName" name="name" placeholder="Enter product name" required>
             </div>
             <div class="form-group">
-                <label for="productPrice">Product Price:</label>
+                <label for="productPrice">Product price:</label>
                 <input type="number" step="0.01" class="form-control" id="productPrice" name="price" placeholder="Enter product price" required>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Add Product</button>
+            <button type="submit" id="submitButton" class="btn btn-primary btn-block">Add</button>
         </form>
 
         <div th:if="${message}" class="alert alert-info mt-3">
@@ -105,28 +106,41 @@
         <div th:each="product : ${products}" class="product-card">
             <h5 th:text="${product.name}">Product Name</h5>
             <p class="product-price" th:text="'$' + ${product.price}">$0.00</p>
-				<form th:action="@{/admin/products/edit}" method="get" style="display:inline;">
-                    <input type="hidden" name="id" th:value="${product.id}" />
-                    <button class="btn btn-primary">Edit</button>
-                </form>
-                <form th:action="@{/admin/products/delete}" method="post" style="display:inline;">
-                    <input type="hidden" name="id" th:value="${product.id}" />
-                    <button class="btn btn-danger" type="submit">Remove</button>
-                </form>
+			<button class="btn btn-primary"
+			    th:data-id="${product.id}"
+			    th:data-name="${product.name}"
+			    th:data-price="${product.price}"
+			    onclick="editProduct(this.getAttribute('data-id'), this.getAttribute('data-name'), this.getAttribute('data-price'))">
+			    Edit
+			</button>
+            <form th:action="@{/admin/products/delete}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${product.id}" />
+                <button class="btn btn-danger" type="submit">Remove</button>
+            </form>
         </div>
     </div>
 
-    <!-- Script de validación -->
     <script>
+		
+		function editProduct(id, name, price) {
+            document.getElementById('form-title').innerText = 'Edit product';
+            document.getElementById('productId').value = id;
+            document.getElementById('productName').value = name;
+            document.getElementById('productPrice').value = price;
+            document.getElementById('productForm').action = '/admin/products/update';
+            document.getElementById('submitButton').innerText = 'Update';
+		}
         document.getElementById('productForm').addEventListener('submit', function(event) {
             const name = document.getElementById('productName').value;
             const price = document.getElementById('productPrice').value;
 
             if (!name || !price || price <= 0) {
                 event.preventDefault();
-                alert('Please provide a valid product name and price greater than 0.');
+                alert('Invalid data: please input a valid name and price greater than 0.');
             }
         });
+		
+		
     </script>
 </body>
 </html>

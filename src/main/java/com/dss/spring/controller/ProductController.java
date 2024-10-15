@@ -1,6 +1,7 @@
 package com.dss.spring.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,22 @@ public class ProductController {
 	public String deleteProduct(@RequestParam Long id, RedirectAttributes redirectAttributes) {
 	    productService.deleteProduct(id);
 	    redirectAttributes.addFlashAttribute("message", "Product removed successfully!");
+	    return "redirect:/admin/products";
+	}
+	
+	@PostMapping("/admin/products/update")
+	public String updateProduct(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("price") double price, RedirectAttributes redirectAttributes) {
+	    Optional<Product> existingProduct = productService.findById(id);
+	    
+	    if (existingProduct.isPresent()) {
+	        Product product = existingProduct.get();
+	        product.setName(name);
+	        product.setPrice(price);
+	        productService.addProduct(product);
+	        redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
+	    } else {
+	    	redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
+	    }
 	    return "redirect:/admin/products";
 	}
 

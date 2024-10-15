@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product Catalog</title>
+    <title>Product catalog</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -100,7 +100,7 @@
 
         .product-price {
             font-size: 1.1em;
-            color: #28a745;
+            color: rgb(0, 128, 64);
             margin-bottom: 15px;
         }
 
@@ -116,7 +116,7 @@
         }
 
         .buy-button:hover {
-            background-color: rgb(168, 255, 179);
+            background-color: rgb(0, 255, 0);
         }
 
         @media (max-width: 768px) {
@@ -136,15 +136,12 @@
             <a href="/catalog">Catalog</a>
             <a href="/myBag">My Bag</a>
 			<a href="/admin/products" sec:authorize="hasRole('ROLE_ADMIN')">Admin console</a>
-			<button onclick="downloadSQL()">Descargar Base de Datos</button>
+			<button onclick="downloadSQL()">Download DB</button>
         </div>
         <div>
 			<p th:if="${#authentication != null}">
 				Hello, <span th:text="${#authentication.name}">Usuario</span>!
 			</p>
-			<div th:if="${#authentication == null}">
-		        <p>You must login. <a th:href="@{/login}">Login</a></p>
-			</div>
             <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="logout-button">Logout</button>
             </form>
@@ -155,7 +152,7 @@
 
     <div th:if="${#authentication != null}" class="catalog-container">
         <div th:each="product : ${products}" class="product-card">
-            <div class="product-name" th:text="${product.name}">Product Name</div>
+            <div class="product-name" th:text="${product.name}">Product name</div>
             <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
             <a href="#" class="buy-button">Add to my bag</a>
         </div>

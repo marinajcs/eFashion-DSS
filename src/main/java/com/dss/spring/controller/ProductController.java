@@ -1,6 +1,7 @@
 package com.dss.spring.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,6 @@ import com.dss.spring.model.Product;
 import com.dss.spring.service.ProductService;
 
 @Controller
-//@RequestMapping("/admin")
 public class ProductController {
 
 	private ProductService productService;
@@ -22,7 +22,7 @@ public class ProductController {
         this.productService = productService;
     }
 	
-	@PostMapping("/admin/addProduct")
+	@PostMapping("/admin/products/add")
     public String addProduct(@RequestParam("name") String name, 
                              @RequestParam("price") double price, 
                              RedirectAttributes redirectAttributes) {
@@ -32,15 +32,51 @@ public class ProductController {
         productService.addProduct(product);
 
         redirectAttributes.addFlashAttribute("message", "Product added successfully!");
-        return "redirect:/admin";
+        return "redirect:/admin/products";
     }
-	/*
-    @GetMapping("/admin")
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
-        return "admin";
-    }
-    */
+	
+	@PostMapping("/admin/products/delete")
+	public String deleteProduct(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+	    productService.deleteProduct(id);
+	    redirectAttributes.addFlashAttribute("message", "Product removed successfully!");
+	    return "redirect:/admin/products";
+	}
+	
+	@PostMapping("/admin/products/update")
+	public String updateProduct(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("price") double price, RedirectAttributes redirectAttributes) {
+	    Optional<Product> existingProduct = productService.findById(id);
+	    
+	    if (existingProduct.isPresent()) {
+	        Product product = existingProduct.get();
+	        product.setName(name);
+	        product.setPrice(price);
+	        productService.addProduct(product);
+	        redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
+	    } else {
+	    	redirectAttributes.addFlashAttribute("message", "Product updated successfully!");
+	    }
+	    return "redirect:/admin/products";
+	}
+
+	@GetMapping("/admin/products")
+	public String showCatalogAdmin(Model model) {
+		List<Product> products = productService.getAllProducts();
+		model.addAttribute("products", products);
+		return "admin";
+   }
+	
+	@GetMapping("/admin")
+	public String showAdmin(Model model) {
+		List<Product> products = productService.getAllProducts();
+		model.addAttribute("products", products);
+		return "admin";
+   }
+ 
+	@GetMapping("/catalog")
+	public String showCatalog(Model model) {
+		List<Product> products = productService.getAllProducts();
+		model.addAttribute("products", products);
+		return "catalog";
+   }
 
 }

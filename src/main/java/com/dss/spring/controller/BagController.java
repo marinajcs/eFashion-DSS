@@ -1,6 +1,7 @@
 package com.dss.spring.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,10 @@ import com.dss.spring.service.UserService;
 public class BagController {
 
     private BagService bagService;
-    private UserService userService;
 
     @Autowired
     public BagController(BagService bagService, UserService userService) {
         this.bagService = bagService;
-        this.userService = userService;
     }
 
     @PostMapping("/catalog/add")
@@ -34,6 +33,17 @@ public class BagController {
             redirectAttributes.addFlashAttribute("message", "Product added to your bag successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error adding product to bag: " + e.getMessage());
+        }
+        return "redirect:/bag";
+    }
+    
+    @PostMapping("/bag/add")
+    public String add1MoreProduct(@RequestParam("productId") Long productId, RedirectAttributes redirectAttributes) {
+        try {
+            bagService.addProductToBag(productId);
+            redirectAttributes.addFlashAttribute("message", "Product quantity increased successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error increasing product quantity: " + e.getMessage());
         }
         return "redirect:/bag";
     }
@@ -51,11 +61,21 @@ public class BagController {
 
     @GetMapping("/bag")
     public String showUserBag(Model model) {
-        User user = userService.getAuthenticatedUser();
-        Bag userBag = bagService.getBagForUser(user);
-        List<Product> productsInBag = userBag.getProducts();
+        Map<Product, Integer> productsInBag = bagService.getProductsInBag();
         model.addAttribute("products", productsInBag);
         return "bag";
     }
+    
+    @GetMapping("/bag/empty")
+    public String emptyBag(RedirectAttributes redirectAttributes) {
+        try {
+            bagService.emptyBag();
+            redirectAttributes.addFlashAttribute("message", "Products bought successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error emptying bag: " + e.getMessage());
+        }
+        return "redirect:/bag";
+    }
+    
 }
 

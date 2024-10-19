@@ -79,18 +79,6 @@
             transform: scale(1.05);
         }
 
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background-color: #e0e0e0;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-        }
-
         .product-name {
             font-size: 1.2em;
             font-weight: bold;
@@ -118,6 +106,55 @@
         .buy-button:hover {
             background-color: rgb(0, 255, 0);
         }
+		
+		.button-container {
+		    display: flex;
+		    gap: 10px; /* Espacio entre botones */
+		    justify-content: center; /* Centra los botones horizontalmente */
+		    margin-top: 20px; /* Separación del contenido superior */
+		}
+
+		.btn {
+		    display: inline-block;
+		    padding: 10px 20px;
+		    background-color: #90ee90; /* Color verde claro */
+		    color: white;
+		    text-align: center;
+		    text-decoration: none;
+		    border: none;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    font-size: 16px;
+		    transition: background-color 0.3s ease;
+		}
+
+		.btn:hover {
+		    background-color: #76c776; /* Color verde un poco más oscuro para hover */
+		}
+
+		.btn-shop {
+		    background-color: #90ee90; /* Color verde claro */
+		}
+
+		.btn-shop:hover {
+		    background-color: #76c776; /* Color verde más oscuro en hover */
+		}
+
+		.btn-bill {
+		    background-color: #90ee90; /* Color verde claro */
+		}
+
+		.btn-bill:hover {
+		    background-color: #76c776; /* Color verde más oscuro en hover */
+		}
+		
+		.btn-remove {
+		    background-color: #ff4d4d; /* Rojo para el botón de remover */
+		}
+
+		.btn-remove:hover {
+		    background-color: #e60000; /* Rojo más oscuro para el hover */
+		}
 
         @media (max-width: 768px) {
             .product-card {
@@ -158,21 +195,24 @@
 	</div>
 		
     <div th:if="${products.size() > 0}" class="bag-container">
-        <div th:each="product : ${products}" class="product-card">
-            <div class="product-name" th:text="${product.name}">Product name</div>
-            <div class="product-price" th:text="'$' + ${product.price}">$0.00</div>
+        <div th:each="item : ${products}" class="product-card">
+            <div class="product-name" th:text="${item.key.name}">Product name</div>
+			<div th:if="${item.value > 1}" class="product-quantity" th:text="'Item quantity: ' + ${item.value}">Item quantity</div>
+			<div class="product-price" th:text="'$' + ${item.key.price * item.value}">$0.00</div>
 			<form th:action="@{/bag/remove}" method="post">
-				<input type="hidden" name="productId" th:value="${product.id}" />
-                <button type="submit">Remove</button>
+				<input type="hidden" name="productId" th:value="${item.key.id}" />
+                <button type="submit" class="btn btn-remove">Remove</button>
             </form>
         </div>
     </div>
 	
-	<a href="/catalog">Continue shopping</a>
-	
-	<form th:action="@{/bag/buy}" method="post">
-		<button type="submit">Proceed with the billing</button>
-	</form>
+	<div class="button-container">
+	    <a href="/catalog" class="btn btn-shop">Continue shopping</a>
+
+	    <form th:action="@{/bag/buy}" method="post">
+	        <button type="submit" class="btn btn-bill">Proceed with the billing</button>
+	    </form>
+	</div>
 	
 	<script>
         function downloadSQL() {

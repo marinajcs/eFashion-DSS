@@ -1,6 +1,7 @@
 package com.dss.spring.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class BagController {
 
     @GetMapping("/bag")
     public String showUserBag(Model model) {
-        List<Product> productsInBag = bagService.getProductsInBag();
+        Map<Product, Integer> productsInBag = bagService.getProductsInBag();
         model.addAttribute("products", productsInBag);
         return "bag";
     }

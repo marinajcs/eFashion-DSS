@@ -55,15 +55,5 @@ public class BagController {
         return "bag";
     }
     
-    @PostMapping("/bag/buy")
-    public String buyProductsFromBag(RedirectAttributes redirectAttributes) {
-    	try {
-            bagService.emptyBag();
-            redirectAttributes.addFlashAttribute("message", "Products bought successfully!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error buying products: " + e.getMessage());
-        }
-        return "redirect:/bag";
-    }
 }
 

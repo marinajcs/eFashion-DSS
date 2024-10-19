@@ -209,15 +209,17 @@
 	<div class="button-container">
 	    <a href="/catalog" class="btn btn-shop">Continue shopping</a>
 
-	    <form th:action="@{/bag/buy}" method="post">
-	        <button type="submit" class="btn btn-bill">Proceed with the billing</button>
-	    </form>
+		<button onclick="downloadBill()" class="btn btn-bill">Proceed with the billing</button>
 	</div>
 	
 	<script>
         function downloadSQL() {
             window.location.href = '/exportDB';
         }
+		
+		function downloadBill() {
+		   	window.location.href = '/bag/buy';
+		}
     </script>
 
 </body>

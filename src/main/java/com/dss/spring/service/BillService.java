@@ -19,57 +19,108 @@ public class BillService {
 	
 	public ByteArrayInputStream generateBillPdf(Map<Product, Integer> products, double totalAmount) {
 
-        Document document = new Document();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+		Document document = new Document();
+	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        try {
-            PdfWriter.getInstance(document, out);
-            document.open();
+	    try {
+	        PdfWriter.getInstance(document, out);
+	        document.open();
 
-            Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.BLACK);
-            Paragraph title = new Paragraph("Invoice", fontTitle);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
+	        Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, BaseColor.BLACK);
+	        Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE);
+	        Font fontBody = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+	        Font fontTotal = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+	        Font fontFooter = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.GRAY);
 
-            Font fontDate = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
-            Paragraph date = new Paragraph("Date: " + LocalDate.now().toString(), fontDate);
-            date.setAlignment(Element.ALIGN_RIGHT);
-            document.add(date);
+	        Paragraph title = new Paragraph("INVOICE", fontTitle);
+	        title.setAlignment(Element.ALIGN_CENTER);
+	        document.add(title);
+	        
+	        document.add(Chunk.NEWLINE);
 
-            document.add(Chunk.NEWLINE);
+	        Paragraph companyInfo = new Paragraph("eFashion Industries \nGranada, Spain \nContact: efashion-info@efashion.com", fontBody);
+	        companyInfo.setAlignment(Element.ALIGN_LEFT);
+	        document.add(companyInfo);
 
-            PdfPTable table = new PdfPTable(4);
-            table.setWidthPercentage(100);
-            table.setWidths(new int[]{3, 2, 1, 2});
+	        document.add(Chunk.NEWLINE);
 
-            Font headFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-            table.addCell(new PdfPCell(new Phrase("Product Name", headFont)));
-            table.addCell(new PdfPCell(new Phrase("Price", headFont)));
-            table.addCell(new PdfPCell(new Phrase("Quantity", headFont)));
-            table.addCell(new PdfPCell(new Phrase("Total", headFont)));
+	        Paragraph date = new Paragraph("Date: " + LocalDate.now().toString(), fontBody);
+	        date.setAlignment(Element.ALIGN_RIGHT);
+	        document.add(date);
 
-            for (Map.Entry<Product, Integer> entry : products.entrySet()) {
-                Product product = entry.getKey();
-                Integer quantity = entry.getValue();
-                double total = product.getPrice() * quantity;
+	        document.add(Chunk.NEWLINE); 
 
-                table.addCell(new PdfPCell(new Phrase(product.getName())));
-                table.addCell(new PdfPCell(new Phrase("$" + product.getPrice())));
-                table.addCell(new PdfPCell(new Phrase(quantity.toString())));
-                table.addCell(new PdfPCell(new Phrase("$" + total)));
-            }
+	        PdfPTable table = new PdfPTable(4);
+	        table.setWidthPercentage(100);
+	        table.setWidths(new int[]{3, 2, 1, 2});
+	        table.setSpacingBefore(10f);
+	        table.setSpacingAfter(10f);
+	        
+	        BaseColor darkGreen = new BaseColor(0, 100, 0);
 
-            document.add(table);
+	        PdfPCell hcell;
+	        hcell = new PdfPCell(new Phrase("Product name", fontHeader));
+	        hcell.setBackgroundColor(darkGreen);
+	        hcell.setPadding(5);
+	        table.addCell(hcell);
 
-            Paragraph totalParagraph = new Paragraph("Total Amount: $" + totalAmount, fontTitle);
-            totalParagraph.setAlignment(Element.ALIGN_RIGHT);
-            document.add(totalParagraph);
+	        hcell = new PdfPCell(new Phrase("Price", fontHeader));
+	        hcell.setBackgroundColor(darkGreen);
+	        hcell.setPadding(5);
+	        table.addCell(hcell);
 
-            document.close();
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        }
+	        hcell = new PdfPCell(new Phrase("Quantity", fontHeader));
+	        hcell.setBackgroundColor(darkGreen);
+	        hcell.setPadding(5);
+	        table.addCell(hcell);
 
-        return new ByteArrayInputStream(out.toByteArray());
+	        hcell = new PdfPCell(new Phrase("Total", fontHeader));
+	        hcell.setBackgroundColor(darkGreen);
+	        hcell.setPadding(5);
+	        table.addCell(hcell);
+
+	        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+	            Product product = entry.getKey();
+	            Integer quantity = entry.getValue();
+	            double total = product.getPrice() * quantity;
+
+	            PdfPCell cell;
+
+	            cell = new PdfPCell(new Phrase(product.getName(), fontBody));
+	            cell.setPadding(5);
+	            table.addCell(cell);
+
+	            cell = new PdfPCell(new Phrase(String.format("$%.2f", product.getPrice()), fontBody));
+	            cell.setPadding(5);
+	            table.addCell(cell);
+
+	            cell = new PdfPCell(new Phrase(quantity.toString(), fontBody));
+	            cell.setPadding(5);
+	            table.addCell(cell);
+
+	            cell = new PdfPCell(new Phrase(String.format("$%.2f", total), fontBody));
+	            cell.setPadding(5);
+	            table.addCell(cell);
+	        }
+	        document.add(table);
+
+	        Paragraph totalParagraph = new Paragraph("Total amount: $" + String.format("%.2f", totalAmount), fontTotal);
+	        totalParagraph.setAlignment(Element.ALIGN_RIGHT);
+	        totalParagraph.setSpacingBefore(20);
+	        document.add(totalParagraph);
+
+	        document.add(Chunk.NEWLINE);
+
+	        Paragraph footer = new Paragraph("Thank you for your purchase in eFashion.com!", fontFooter);
+	        footer.setAlignment(Element.ALIGN_CENTER);
+	        footer.setSpacingBefore(30);
+	        document.add(footer);
+
+	        document.close();
+	    } catch (DocumentException ex) {
+	        ex.printStackTrace();
+	    }
+
+	    return new ByteArrayInputStream(out.toByteArray());
     }
 }

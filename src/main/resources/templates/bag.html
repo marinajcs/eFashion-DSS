@@ -90,7 +90,16 @@
             font-size: 1.1em;
             color: rgb(0, 128, 64);
             margin-bottom: 15px;
+			margin-top: 5px;
         }
+		
+		.product-actions {
+		    display: flex;
+		    align-items: center;
+			justify-content: center;
+		    gap: 10px;
+		    margin-top: 10px;
+		}
 
         .buy-button {
             display: inline-block;
@@ -140,11 +149,11 @@
 		    background-color: #76c776; /* Color verde más oscuro en hover */
 		}
 
-		.btn-bill {
+		.btn-bill, .btn-add {
 		    background-color: #90ee90; /* Color verde claro */
 		}
 
-		.btn-bill:hover {
+		.btn-bill:hover, .btn-add:hover {
 		    background-color: #76c776; /* Color verde más oscuro en hover */
 		}
 		
@@ -199,17 +208,23 @@
             <div class="product-name" th:text="${item.key.name}">Product name</div>
 			<div th:if="${item.value > 1}" class="product-quantity" th:text="'Item quantity: ' + ${item.value}">Item quantity</div>
 			<div class="product-price" th:text="'$' + ${item.key.price * item.value}">$0.00</div>
-			<form th:action="@{/bag/remove}" method="post">
-				<input type="hidden" name="productId" th:value="${item.key.id}" />
-                <button type="submit" class="btn btn-remove">Remove</button>
-            </form>
+			<div class="product-actions">
+	            <form th:action="@{/bag/add}" method="post" style="display: inline;">
+	                <input type="hidden" name="productId" th:value="${item.key.id}" />
+	                <button type="submit" class="btn btn-add">Add</button>
+	            </form>
+	            <form th:action="@{/bag/remove}" method="post" style="display: inline;">
+	                <input type="hidden" name="productId" th:value="${item.key.id}" />
+	                <button type="submit" class="btn btn-remove">Remove</button>
+	            </form>
+	        </div>
         </div>
     </div>
 	
 	<div class="button-container">
 	    <a href="/catalog" class="btn btn-shop">Continue shopping</a>
 
-		<button onclick="downloadBill()" class="btn btn-bill">Proceed with the billing</button>
+		<button onclick="downloadBillAndEmptybag()" class="btn btn-bill">Proceed with the billing</button>
 	</div>
 	
 	<script>
@@ -217,8 +232,29 @@
             window.location.href = '/exportDB';
         }
 		
-		function downloadBill() {
-		   	window.location.href = '/bag/buy';
+		function downloadBillAndEmptybag() {
+			fetch('/bag/buy')
+		        .then(response => {
+		            if (response.ok) {
+		                return response.blob();  // Obtiene el contenido del PDF
+		            } else {
+		                throw new Error('Error downloading the invoice.');
+		            }
+		        })
+		        .then(blob => {
+		            const url = window.URL.createObjectURL(blob);
+		            const a = document.createElement('a');
+		            a.href = url;
+		            a.download = 'eFashionBill.pdf';  // Nombre del archivo
+		            document.body.appendChild(a);
+		            a.click();
+		            a.remove();
+
+		            window.location.href = '/bag/empty';
+		        })
+		        .catch(error => {
+		            console.error('Error during the PDF download or redirection:', error);
+		        });
 		}
     </script>
 

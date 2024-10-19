@@ -40,13 +40,6 @@ public class BillController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=eFashionBill.pdf");
         
-        try {
-        	bagService.emptyBag();
-            redirectAttributes.addFlashAttribute("message", "Products bought successfully!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error buying products: " + e.getMessage());
-        }
-        
         return ResponseEntity.ok()
             .headers(headers)
             .contentType(MediaType.APPLICATION_PDF)

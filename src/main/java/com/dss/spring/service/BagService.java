@@ -54,6 +54,14 @@ public class BagService {
         Bag bag = getBagForUser(user);
         return bag.getProducts();
     }
+    
+    public void emptyBag() throws RuntimeException {
+    	User user = userService.getAuthenticatedUser();
+        Bag bag = getBagForUser(user);
+        bag.emptyBag();
+        bagRepo.save(bag);
+    }
+    
 }
 
 

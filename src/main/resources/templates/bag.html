@@ -170,6 +170,10 @@
 	
 	<a href="/catalog">Continue shopping</a>
 	
+	<form th:action="@{/bag/buy}" method="post">
+		<button type="submit">Proceed with the billing</button>
+	</form>
+	
 	<script>
         function downloadSQL() {
             window.location.href = '/exportDB';

@@ -27,7 +27,6 @@ public class Bag {
     @JoinColumn(name = "bag_id")
     private List<Product> products = new ArrayList<>();
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -58,6 +57,10 @@ public class Bag {
 
     public void removeProduct(Product product) {
         this.products.remove(product);
+    }
+    
+    public void emptyBag() {
+    	this.products.clear();
     }
 }
 

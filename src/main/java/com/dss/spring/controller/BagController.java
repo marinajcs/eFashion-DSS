@@ -19,12 +19,10 @@ import com.dss.spring.service.UserService;
 public class BagController {
 
     private BagService bagService;
-    private UserService userService;
 
     @Autowired
     public BagController(BagService bagService, UserService userService) {
         this.bagService = bagService;
-        this.userService = userService;
     }
 
     @PostMapping("/catalog/add")
@@ -51,11 +49,20 @@ public class BagController {
 
     @GetMapping("/bag")
     public String showUserBag(Model model) {
-        User user = userService.getAuthenticatedUser();
-        Bag userBag = bagService.getBagForUser(user);
-        List<Product> productsInBag = userBag.getProducts();
+        List<Product> productsInBag = bagService.getProductsInBag();
         model.addAttribute("products", productsInBag);
         return "bag";
+    }
+    
+    @PostMapping("/bag/buy")
+    public String buyProductsFromBag(RedirectAttributes redirectAttributes) {
+    	try {
+            bagService.emptyBag();
+            redirectAttributes.addFlashAttribute("message", "Products bought successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error buying products: " + e.getMessage());
+        }
+        return "redirect:/bag";
     }
 }
 

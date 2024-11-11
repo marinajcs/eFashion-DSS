@@ -224,7 +224,7 @@
 	<div class="button-container">
 	    <a href="/catalog" class="btn btn-shop">Continue shopping</a>
 
-		<button onclick="downloadBillAndEmptybag()" class="btn btn-bill">Proceed with the billing</button>
+		<button th:if="${products.size() > 0}" onclick="downloadBillAndEmptybag()" class="btn btn-bill">Proceed with the billing</button>
 	</div>
 	
 	<script>

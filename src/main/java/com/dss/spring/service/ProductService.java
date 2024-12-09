@@ -1,7 +1,11 @@
 package com.dss.spring.service;
 
+import com.dss.spring.model.Bag;
 import com.dss.spring.model.Product;
+import com.dss.spring.repo.BagRepo;
 import com.dss.spring.repo.ProductRepo;
+
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +16,12 @@ import java.util.Optional;
 @Service
 public class ProductService {
 	private final ProductRepo productRepo;
+	private final BagRepo bagRepo;
 
     @Autowired
-    public ProductService(ProductRepo productRepository) {
+    public ProductService(ProductRepo productRepository, BagRepo bagRepository) {
         this.productRepo = productRepository;
+        this.bagRepo = bagRepository;
     }
 
     public List<Product> getAllProducts() {
@@ -30,8 +36,13 @@ public class ProductService {
         return productRepo.findById(id);
     }
 
-    public void deleteProduct(Long id) {
-        productRepo.deleteById(id);
+    @Transactional
+    public void deleteProduct(Long productId) {
+        List<Bag> bags = bagRepo.findAll();
+        for (Bag bag : bags) {
+            bag.getProducts().keySet().removeIf(product -> product.getId().equals(productId));
+        }
+        productRepo.deleteById(productId);
     }
 	
 }

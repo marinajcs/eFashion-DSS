@@ -15,14 +15,10 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-	private final ProductRepo productRepo;
-	private final BagRepo bagRepo;
-
-    @Autowired
-    public ProductService(ProductRepo productRepository, BagRepo bagRepository) {
-        this.productRepo = productRepository;
-        this.bagRepo = bagRepository;
-    }
+	@Autowired
+	private ProductRepo productRepo;
+	@Autowired
+	private BagRepo bagRepo;
 
     public List<Product> getAllProducts() {
         return productRepo.findAll();
@@ -35,6 +31,14 @@ public class ProductService {
     public Optional<Product> findById(Long id) {
         return productRepo.findById(id);
     }
+    
+    public Product getProductById(Long id) {
+		return productRepo.findById(id).orElse(null);
+	}
+    
+    public void saveProduct(Product product) {
+		productRepo.save(product);
+	}
 
     @Transactional
     public void deleteProduct(Long productId) {

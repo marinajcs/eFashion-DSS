@@ -2,6 +2,8 @@
 
 **Fecha de subida**: 19/10/2024
 
+**Fecha de actualización de RestControllers:** 17/12/2024
+
 A continuación, se presenta un resumen de los tipos de usuarios, sus respectivos niveles de seguridad y las credenciales utilizadas:
 
 ## Tipos de usuarios/roles y niveles de seguridad

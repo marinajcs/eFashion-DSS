@@ -5,6 +5,7 @@ import com.dss.spring.model.Product;
 import com.dss.spring.model.User;
 import com.dss.spring.repo.BagRepo;
 import com.dss.spring.repo.ProductRepo;
+import com.dss.spring.repo.UserRepo;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class BagService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepo userRepo;
 
     public Bag getBagForUser(User user) {
         return bagRepo.findByUser(user).orElseGet(() -> {
@@ -56,12 +59,24 @@ public class BagService {
         return bag.getProducts();
     }
     
+    public Map<Product, Integer> getCart(String username){
+		User user = userRepo.findByUsername(username);
+		Bag cart = this.getBagForUser(user);
+		return cart.getProducts();
+	}
+    
     public void emptyBag() throws RuntimeException {
     	User user = userService.getAuthenticatedUser();
         Bag bag = getBagForUser(user);
         bag.emptyBag();
         bagRepo.save(bag);
     }
+    
+    public double getTotal() {
+    	User user = userService.getAuthenticatedUser();
+        Bag bag = getBagForUser(user);
+		return bag.getTotal();
+	}
     
 }
 

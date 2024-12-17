@@ -1,5 +1,7 @@
 package com.dss.spring.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,5 +84,14 @@ public class Bag {
     public void emptyBag() {
     	this.products.clear();
     }
+    
+    public double getTotal() {
+		double total = 0.0;
+		for(Map.Entry<Product, Integer> product : products.entrySet()) {
+			total += (product.getKey().getPrice()*product.getValue());
+		}
+		BigDecimal totalRounded = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
+	    return totalRounded.doubleValue();
+	}
 }
 

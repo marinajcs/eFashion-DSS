@@ -229,14 +229,14 @@
 	
 	<script>
         function downloadSQL() {
-            window.location.href = '/exportDB';
+            window.location.href = '/admin/exportDB';
         }
 		
 		function downloadBillAndEmptybag() {
 			fetch('/bag/buy')
 		        .then(response => {
 		            if (response.ok) {
-		                return response.blob();  // Obtiene el contenido del PDF
+		                return response.blob();
 		            } else {
 		                throw new Error('Error downloading the invoice.');
 		            }
@@ -245,7 +245,7 @@
 		            const url = window.URL.createObjectURL(blob);
 		            const a = document.createElement('a');
 		            a.href = url;
-		            a.download = 'eFashionBill.pdf';  // Nombre del archivo
+		            a.download = 'eFashionBill.pdf';
 		            document.body.appendChild(a);
 		            a.click();
 		            a.remove();

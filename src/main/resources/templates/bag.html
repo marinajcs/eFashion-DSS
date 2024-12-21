@@ -118,15 +118,20 @@
 		
 		.button-container {
 		    display: flex;
-		    gap: 10px; /* Espacio entre botones */
-		    justify-content: center; /* Centra los botones horizontalmente */
-		    margin-top: 20px; /* Separación del contenido superior */
+		    gap: 10px;
+		    justify-content: center;
+		    margin-top: 20px;
+		}
+		
+		.total-price {
+		    text-align: center;
+		    margin-top: 20px;
 		}
 
 		.btn {
 		    display: inline-block;
 		    padding: 10px 20px;
-		    background-color: #90ee90; /* Color verde claro */
+		    background-color: #90ee90;
 		    color: white;
 		    text-align: center;
 		    text-decoration: none;
@@ -138,31 +143,31 @@
 		}
 
 		.btn:hover {
-		    background-color: #76c776; /* Color verde un poco más oscuro para hover */
+		    background-color: #76c776;
 		}
 
 		.btn-shop {
-		    background-color: #90ee90; /* Color verde claro */
+		    background-color: #90ee90;
 		}
 
 		.btn-shop:hover {
-		    background-color: #76c776; /* Color verde más oscuro en hover */
+		    background-color: #76c776;
 		}
 
 		.btn-bill, .btn-add {
-		    background-color: #90ee90; /* Color verde claro */
+		    background-color: #90ee90;
 		}
 
 		.btn-bill:hover, .btn-add:hover {
-		    background-color: #76c776; /* Color verde más oscuro en hover */
+		    background-color: #76c776;
 		}
 		
 		.btn-remove {
-		    background-color: #ff4d4d; /* Rojo para el botón de remover */
+		    background-color: #ff4d4d;
 		}
 
 		.btn-remove:hover {
-		    background-color: #e60000; /* Rojo más oscuro para el hover */
+		    background-color: #e60000;
 		}
 
         @media (max-width: 768px) {
@@ -220,6 +225,10 @@
 	        </div>
         </div>
     </div>
+	
+	<div class="total-price">
+	    <h2>Total price: <span th:text="'$' + ${total}">$0.00</span></h2>
+	</div>
 	
 	<div class="button-container">
 	    <a href="/catalog" class="btn btn-shop">Continue shopping</a>

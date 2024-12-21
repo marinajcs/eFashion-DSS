@@ -34,8 +34,10 @@ public class BagController {
 	
     @GetMapping
     public String showUserBag(Model model) {
-        Map<Product, Integer> productsInBag = bagService.getProductsInBag();
+    	Map<Product, Integer> productsInBag = bagService.getProductsInBag();
+        double total = bagService.getTotal();
         model.addAttribute("products", productsInBag);
+        model.addAttribute("total", total);
         return "bag";
     }
     
